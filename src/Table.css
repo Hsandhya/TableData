@@ -1,0 +1,25 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+
+input
+{
+    width: 30%;
+}
+
+th
+{
+    text-align: center;
+}
+
+body
+{
+    margin: 1rem;
+}
+
+h3{
+    display: flex;
+    justify-content: center;
+}
+
+
