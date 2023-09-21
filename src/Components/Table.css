@@ -1,0 +1,51 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+
+input
+{
+    width: 30%;
+}
+
+th
+{
+    text-align: center;
+}
+
+body
+{
+    margin: 1rem;
+
+}
+
+h3{
+    display: flex;
+    justify-content: center;
+}
+
+.card
+{
+    display: flex;
+    gap: 1rem;
+    margin-top: 20px;
+    border: none;
+}
+
+
+@media (min-width: 768px){
+    .table-view{
+        display: block;
+    }
+    .card-view{
+        display: none;
+    }
+}
+@media (max-width: 767px){
+    .card-view{
+        display: block;
+    }
+    .table-view{
+        display: none;
+    }
+
+}
