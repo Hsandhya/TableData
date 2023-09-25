@@ -33,6 +33,10 @@ export const updateBrewedState = (date) => ({
   payload: date,
 });
 
+
+
+  
+
 export const fetchBeers =
   (searchQuery, currentPage, brewedState) => async (dispatch) => {
 
@@ -40,6 +44,8 @@ export const fetchBeers =
       const response = await axios.get(
         `https://api.punkapi.com/v2/beers?page=${currentPage}&per_page=10&${brewedState}="10-2013"`
       );
+
+      
 
       const filteredBeers = response.data.filter(
         (beer) =>

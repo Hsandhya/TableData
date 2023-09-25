@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./Table.css";
-import { Pagination, Switch } from "antd";
+import dayjs from 'dayjs'
+import { Pagination, Switch, DatePicker,Image } from "antd";
 import {
   fetchBeers,
   updateSearchQuery,
   updateCurrentPage,
   updateBrewedState,
 } from "../Actions/beerActions";
+
 import CardView from "./card";
 
+const monthFormat = 'YYYY/MM';
+
 const Table = (props) => {
+
+  console.log(props,"props");
   const {
     searchQuery,
     currentPage,
@@ -23,9 +29,10 @@ const Table = (props) => {
     fetchBeers,
   } = props;
 
+
   useEffect(() => {
-    fetchBeers(searchQuery, currentPage, brewedState);
-  }, [searchQuery, currentPage, brewedState, fetchBeers]);
+    fetchBeers(searchQuery,currentPage, brewedState,totalItems);
+  }, [searchQuery, currentPage, brewedState, fetchBeers,totalItems]);
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -35,6 +42,8 @@ const Table = (props) => {
   const handlePagination = (page) => {
     updateCurrentPage(page);
   };
+
+  
 
   const handlebrewState = (date) => {
     if (!date) {
@@ -64,26 +73,60 @@ const Table = (props) => {
     
   }
 
+  const onChange = (date, dateString) => {
+    const newVal = dayjs(dateString).format('MM-YYYY')
+      if(brewedState === "brewed_before"){
+           updateBrewedState(`brewed_before=${newVal}`)
+          
+          console.log("im if state");
+      }
+      else{
+        updateBrewedState("")
+        updateBrewedState(`brewed_after=${newVal}`)
+     
+      console.log("im else state");
+      }
+  
+         
+    };
+
   return (
     <div className="container-fluid mt-4 mb-4">
       <h3>Table Data</h3>
-      <div style={{ display: "flex", justifyContent:"space-between", gap: "1rem" }}>
+      <div style={{ display: "flex", justifyContent:"center", gap: "1rem" }}>
         <input
           placeholder="Search by name or Tagline or Description..."
           value={searchQuery}
           onChange={handleSearch}
         />
-       {isFilterChecked &&
-        <Switch
-          checkedChildren="After 2013/08"
-          unCheckedChildren="Before 2013/08"
-          onClick={handlebrewState}
-  
-        ></Switch>}
-      </div>
+        {isFilterChecked &&
+        <DatePicker onChange={onChange} 
+        picker="month"
+        defaultValue={dayjs('2013/10', monthFormat)} 
+        format={monthFormat}>
 
-      <div style={{marginTop:'1rem', display:'flex', gap:'0.5rem'}}>Date Filter
-        <Switch  onClick={handleAppliedFilter}></Switch>
+        </DatePicker>
+            }
+
+        </div>
+      
+      
+        
+
+        
+      
+
+      <div style={{marginTop:'1rem', display:'flex',justifyContent:"space-between"}}>
+        <div style={{ display:'flex',gap:'0.5rem'}}>Date Filter<Switch  onClick={handleAppliedFilter}></Switch></div>
+        {isFilterChecked &&
+       
+       <Switch
+       style={{display:"flex",justifyContent:"space-between"}}
+         checkedChildren="After"
+         unCheckedChildren="Before"
+         onClick={handlebrewState}
+ 
+       ></Switch>}
         </div>
 
       <div className="table-view">
@@ -104,11 +147,13 @@ const Table = (props) => {
                 <td>{data.id}</td>
                 <td>{data.name}</td>
                 <td>
-                  <img
-                    style={{ height: "80px", width: "40px" }}
-                    src={data.image_url}
-                    alt="Failed_loading"
+                  <Image
+                  height={80}
+                  width={40}
+                  src={data.image_url}
                   />
+                    
+                  
                 </td>
                 <td>{data.tagline}</td>
                 <td>{data.description}</td>
@@ -127,6 +172,7 @@ const Table = (props) => {
           total={totalItems}
           onChange={handlePagination}
           showSizeChanger={false}
+          // pageSize={25}
         />
       </div>
     </div>
