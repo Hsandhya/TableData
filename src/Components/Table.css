@@ -31,13 +31,22 @@ h3{
     border: none;
 }
 
+.table>:not(caption)>*>* {
+    padding: .5rem 2.5rem !important;
+}
+
 
 @media (min-width: 768px){
     .table-view{
         display: block;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        
     }
     .card-view{
         display: none;
+    }
+    body{
+        background-color: rgb(175, 221, 253);
     }
 }
 @media (max-width: 767px){
@@ -46,6 +55,9 @@ h3{
     }
     .table-view{
         display: none;
+    }
+    .ant-card{
+        box-shadow: rgba(100, 63, 87, 0.35) 0px 5px 15px;
     }
 
 }

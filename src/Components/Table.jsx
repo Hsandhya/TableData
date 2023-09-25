@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./Table.css";
 import { Pagination, Switch } from "antd";
@@ -6,7 +6,7 @@ import {
   fetchBeers,
   updateSearchQuery,
   updateCurrentPage,
-  updateBrewedBefore,
+  updateBrewedState,
 } from "../Actions/beerActions";
 import CardView from "./card";
 
@@ -14,9 +14,9 @@ const Table = (props) => {
   const {
     searchQuery,
     currentPage,
-    brewBefore,
+    brewedState,
     updateCurrentPage,
-    updateBrewedBefore,
+    updateBrewedState,
     updateSearchQuery,
     beers,
     totalItems,
@@ -24,8 +24,8 @@ const Table = (props) => {
   } = props;
 
   useEffect(() => {
-    fetchBeers(searchQuery, currentPage, brewBefore);
-  }, [searchQuery, currentPage, brewBefore, fetchBeers]);
+    fetchBeers(searchQuery, currentPage, brewedState);
+  }, [searchQuery, currentPage, brewedState, fetchBeers]);
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -38,11 +38,31 @@ const Table = (props) => {
 
   const handlebrewState = (date) => {
     if (!date) {
-      updateBrewedBefore("brewed_before");
+      updateBrewedState("brewed_before");
     } else {
-      updateBrewedBefore("brewed_after");
+      updateBrewedState("brewed_after");
     }
   };
+
+  const [isFilterChecked, setIsfilterChecked] = useState(false)
+
+  const handleAppliedFilter =(checked) =>
+  {
+    if (checked)
+    {
+      setIsfilterChecked(!isFilterChecked)
+      updateBrewedState("brewed_before");
+      
+      
+    }
+    else
+    {
+      setIsfilterChecked(false)
+      updateBrewedState(currentPage)
+     
+    }
+    
+  }
 
   return (
     <div className="container-fluid mt-4 mb-4">
@@ -53,24 +73,29 @@ const Table = (props) => {
           value={searchQuery}
           onChange={handleSearch}
         />
-
+       {isFilterChecked &&
         <Switch
-          checkedChildren="After 2010/08"
-          unCheckedChildren="Before 2010/08"
+          checkedChildren="After 2013/08"
+          unCheckedChildren="Before 2013/08"
           onClick={handlebrewState}
-        ></Switch>
+  
+        ></Switch>}
       </div>
 
+      <div style={{marginTop:'1rem', display:'flex', gap:'0.5rem'}}>Date Filter
+        <Switch  onClick={handleAppliedFilter}></Switch>
+        </div>
+
       <div className="table-view">
-        <table className="table table-striped table-hover mt-4">
+        <table className="table table-striped table-hover mt-4 pr-3">
           <thead className="table-dark">
             <tr>
-              <th>ID</th>
+              <th className="heading-class" style={{borderTopLeftRadius:'8px'}}>ID</th>
               <th>Name</th>
               <th>Image</th>
               <th>Tagline</th>
               <th>Description</th>
-              <th>First Brewed</th>
+              <th style={{borderTopRightRadius:'8px'}}>First Brewed</th>
             </tr>
           </thead>
           <tbody>
@@ -115,12 +140,12 @@ const mapStateToProps = (state) => ({
   searchQuery: state.beer.searchQuery,
   currentPage: state.beer.currentPage,
   totalItems: state.beer.totalItems,
-  brewBefore: state.beer.brewBefore,
+  brewedState: state.beer.brewedState,
 });
 
 export default connect(mapStateToProps, {
   fetchBeers,
   updateSearchQuery,
   updateCurrentPage,
-  updateBrewedBefore,
+  updateBrewedState,
 })(Table);

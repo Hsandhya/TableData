@@ -4,7 +4,7 @@ import {
   FETCH_BEERS_FAILURE,
   UPDATE_SEARCH_QUERY,
   UPDATE_CURRENT_PAGE,
-  UPDATE_BREWED_BEFORE,
+  UPDATE_BREWED_STATE,
 } from '../Actions/actionTypes';
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
   searchQuery: '',
   brewState: '',
   totalItems:'75',
-  brewBefore:'brewed_before'
+  brewedState:''
 };
 
 
@@ -44,10 +44,10 @@ const DataReducer = (state = initialState, action) => {
         ...state,
         currentPage: action.payload
       }
-    case UPDATE_BREWED_BEFORE:
+    case UPDATE_BREWED_STATE:
       return {
         ...state,
-        brewBefore: action.payload
+        brewedState: action.payload
       }
     default:
       return state;

@@ -8,20 +8,16 @@ import { connect } from "react-redux";
 const CardView = (props) => {
     const {beers} = props;
     
-    // console.log(search,"search...............")
-    // console.log(currentPage,"page...............")
-    // console.log(total,"total...............")
-
-    // const data = props.data
-
-    // console.log(data,'======card data')
+  
 
     const card = beers.map((item =>
       
         <Card
+        className='ant-card'
         title={item.name}
         style={{background: 'pink'}}>
         <p style={{fontWeight:'bold'}}>{item.tagline}</p>
+        <p style={{fontStyle:'italic'}}>First Brewed: {item.first_brewed}</p>
         <p>{item.description}</p>
 
         </Card>

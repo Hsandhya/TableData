@@ -5,7 +5,7 @@ import {
   FETCH_BEERS_FAILURE,
   UPDATE_SEARCH_QUERY,
   UPDATE_CURRENT_PAGE,
-  UPDATE_BREWED_BEFORE,
+  UPDATE_BREWED_STATE,
 } from "./actionTypes";
 
 const fetchBeersSuccess = (beers) => ({
@@ -28,18 +28,17 @@ export const updateCurrentPage = (page) => ({
   payload: page,
 });
 
-export const updateBrewedBefore = (date) => ({
-  type: UPDATE_BREWED_BEFORE,
+export const updateBrewedState = (date) => ({
+  type: UPDATE_BREWED_STATE,
   payload: date,
 });
 
 export const fetchBeers =
-  (searchQuery, currentPage, brewedBefore) => async (dispatch) => {
-    console.log(brewedBefore, "brewwwwwwwwwwwwwwwwwwwwwwwwww");
+  (searchQuery, currentPage, brewedState) => async (dispatch) => {
 
     try {
       const response = await axios.get(
-        `https://api.punkapi.com/v2/beers?page=${currentPage}&per_page=10&${brewedBefore}="10-2010"`
+        `https://api.punkapi.com/v2/beers?page=${currentPage}&per_page=10&${brewedState}="10-2013"`
       );
 
       const filteredBeers = response.data.filter(
