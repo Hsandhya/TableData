@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { connect } from "react-redux";
 import "./Table.css";
 import dayjs from 'dayjs'
-import { Pagination, Switch, DatePicker,Image } from "antd";
+import { Pagination, Switch, DatePicker,Image,Tour} from "antd";
 import {
   fetchBeers,
   updateSearchQuery,
@@ -15,6 +15,27 @@ import CardView from "./card";
 const monthFormat = 'YYYY/MM';
 
 const Table = (props) => {
+
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+
+
+  const [open, setOpen] = useState(true);
+
+  const steps = [
+    {
+      title: 'Search here',
+      description: 'Find what you need effortlessly with intuitive search filters. ',
+      
+      target: () => ref1.current,
+    },
+  
+    {
+      title: 'Click here',
+      description: ' Manage dates with filter.',
+      target: () => ref2.current,
+    },
+  ];
 
   console.log(props,"props");
   const {
@@ -32,7 +53,8 @@ const Table = (props) => {
 
   useEffect(() => {
     fetchBeers(searchQuery,currentPage, brewedState,totalItems);
-  }, [searchQuery, currentPage, brewedState, fetchBeers,totalItems]);
+  }, [searchQuery, currentPage, brewedState, fetchBeers,totalItems,open]);
+
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -94,11 +116,17 @@ const Table = (props) => {
     <div className="container-fluid mt-4 mb-4">
       <h3>Table Data</h3>
       <div style={{ display: "flex", justifyContent:"center", gap: "1rem" }}>
+  
+        
         <input
+        ref={ref1}
+          className="searchBar"
           placeholder="Search by name or Tagline or Description..."
           value={searchQuery}
           onChange={handleSearch}
         />
+
+
         {isFilterChecked &&
         <DatePicker onChange={onChange} 
         picker="month"
@@ -111,13 +139,13 @@ const Table = (props) => {
         </div>
       
       
-        
+        <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
 
         
       
 
       <div style={{marginTop:'1rem', display:'flex',justifyContent:"space-between"}}>
-        <div style={{ display:'flex',gap:'0.5rem'}}>Date Filter<Switch  onClick={handleAppliedFilter}></Switch></div>
+        <div style={{ display:'flex',gap:'0.5rem'}}>Date Filter<Switch ref={ref2} onClick={handleAppliedFilter}></Switch></div>
         {isFilterChecked &&
        
        <Switch
@@ -168,11 +196,11 @@ const Table = (props) => {
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Pagination
+          
           current={currentPage}
           total={totalItems}
           onChange={handlePagination}
           showSizeChanger={false}
-          // pageSize={25}
         />
       </div>
     </div>

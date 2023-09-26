@@ -59,5 +59,9 @@ h3{
     .ant-card{
         box-shadow: rgba(100, 63, 87, 0.35) 0px 5px 15px;
     }
+    .searchBar
+    {
+        width: 80%;
+    }
 
 }
